@@ -1,0 +1,47 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>FE Pairings Optimizer</title>
+
+  <link rel="stylesheet" href="style.css">
+
+  <!--[if lt IE 9]>
+  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+</head>
+
+<body>
+	<div id="detailtable">
+		<div id="blocker"></div>
+		<table id="pairchart" class="fixed" cellpadding="0" cellspacing="0">
+			<thead class="colhead">
+				<tr>
+					<th class="tabcell"></th>
+				</tr>
+			</thead>
+			<tbody>
+
+			</tbody>
+		</table>
+	</div><div id="sidebar">
+		Kamui pair: <input type="text" placeholder="leave blank to not consider Kamui in pairings" name="kamuipair" id="kamuipair">
+		<button>Sort Prefs</button>
+		<div id="prefsorter"></div>
+		<div id="results">
+			<table>
+			</table>
+		</div>
+		<button id="optimize" onclick="generateResults()">Optimize</button>
+	</div>
+  
+</body>
+<script src="jquery-1.11.3.min.js"></script>
+<script src="closure_library/closure/goog/base.js"></script>
+<script src="ik.js"></script>
+<script src="prefs.js"></script>
+<script src="load.js"></script>
+<script src="sort.js"></script>
+</html>
