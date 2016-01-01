@@ -42,6 +42,7 @@ function otpval(pref, char1, char2){
 for(var i = 0; i < rows.length; i++){
 	var row = $('<tr id="'+rows[i]+'"></tr>');
 	var rowh = $('<td class="rowhead tabcell"></td>');
+	if (i === rows.length-1) rowh.addClass("last")
 	rowh.html(rows[i]);
 	row.append($(rowh));
 	cells.push([]);
@@ -96,13 +97,16 @@ function setscroll(){
 }
 
 
-function loaddata(obj,cell){
+function loaddata(weight,shipstatus,cell){
 
 }
 function loadprefs(prefs){
 	for(var i = 0; i< rows.length; i++){
+		var obj = prefs[rows[i]];
 		for(var j = 0; j < cols.length; j++){
-
+			var weight = obj.weights[j];
+			//var otp
+			//loaddata();
 		}
 	}
 }

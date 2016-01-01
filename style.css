@@ -105,6 +105,10 @@ table.fixed td.rowhead{
 	background-color: #FFF;
 	text-transform: capitalize;
 }
+table.fixed td.rowhead.last{
+	height:79px;
+	border-bottom:1px solid #444;
+}
 table.fixed td.col1{
 	border-left:0px;
 }
