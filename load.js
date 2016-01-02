@@ -175,8 +175,8 @@ function setscroll(){
 		if(dir === "down") hitbottom = false;
 
 		$(".rowhead").each(function(i){
-			if(dir === "up")$(this).css("top",-(st-(80*i))+((st <= 5 || !hitbottom)?28:30))
-				else $(this).css("top",-(st-(80*i))+((totsc <= st+5)?30:28)) //all 28 for safari, 29? for ff
+			if(dir === "up")$(this).css("top",-(st-(80*i))+((st <= 5 || !hitbottom)?30:28))
+				else $(this).css("top",-(st-(80*i))+((totsc <= st+5)?28:30)) //all 28 for safari, 29? for ff
 			
 		})
 		if(dir==="down")hitbottom = (totsc <= st+2);
