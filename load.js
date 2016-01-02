@@ -69,7 +69,7 @@ function load(c, d, p){
 	data = d;
 	
 	rows = Object.keys(data);
-	cols.push("unpaired");
+	if(cols.indexOf("unpaired") <= -1) cols.push("unpaired");
 
 	cells = [];
 	thead.html('<th class="tabcell"></th>');
