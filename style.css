@@ -5,6 +5,8 @@ html{
 	margin:0;
 }
 
+
+
 body{
 	width:100%;
 	height:100%;
@@ -113,3 +115,49 @@ table.fixed td.col1{
 	border-left:0px;
 }
 #optimize{}
+
+
+#prefloader{
+	position:fixed;
+	top:0;
+	left:0;
+	width:100%;
+	height:100%;
+	background-color: rgba(0,0,0,0.9);
+	z-index: 100;
+	display: flex;
+	align-items: center;
+  	justify-content: center;
+}
+
+.showbox{
+	position:relative;
+	width:50%;
+	height:75%;
+	border-radius:5px;
+	background-color: #2e8878;
+	display: flex;
+	flex-direction:column;
+	align-items: center;
+  	justify-content: center;
+
+}
+
+.jsonbox{
+	position:relative;
+	width:90%;
+	height:60%;
+	margin-bottom: 25px;
+}
+.boxbtns{
+	position:absolute;
+	height:10%;
+	padding:10px;
+	bottom:0;
+	right:5%;
+}
+
+
+.hidden{
+	display:none !important;
+}

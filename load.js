@@ -98,15 +98,19 @@ function setscroll(){
 
 
 function loaddata(weight,shipstatus,cell){
-
+	cell.find("input[type='text']").val(""+weight);
+	var rad = cell.find("input[type='radio']");
+	rad.eq(shipstatus).prop("checked",true);
 }
-function loadprefs(prefs){
+function loadprefs(){
 	for(var i = 0; i< rows.length; i++){
-		var obj = prefs[rows[i]];
+		var obj = preferences[rows[i]];
 		for(var j = 0; j < cols.length; j++){
 			var weight = obj.weights[j];
-			//var otp
-			//loaddata();
+			var shipstatus = 0;
+			if(obj.otp === cols[j]) shipstatus = 1;
+			else if(obj.notp.indexOf(cols[j]) > -1) shipstatus = 2;
+			loaddata(weight,shipstatus,cells[i][j]);
 		}
 	}
 }
@@ -130,3 +134,4 @@ function gensetup(len){
 	console.log(i1)
 	console.log(genthis);
 }
+

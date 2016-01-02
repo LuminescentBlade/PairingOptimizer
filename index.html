@@ -28,7 +28,8 @@
 		</table>
 	</div><div id="sidebar">
 		Kamui pair: <input type="text" placeholder="leave blank to not consider Kamui in pairings" name="kamuipair" id="kamuipair">
-		<button>Sort Prefs</button>
+		<button id="loadprefs">Load Prefs</button><button id="saveprefs">Save Prefs</button>
+		<button>Sort</button>
 		<div id="prefsorter"></div>
 		<div id="results">
 			<table>
@@ -36,7 +37,23 @@
 		</div>
 		<button id="optimize" onclick="generateResults()">Optimize</button>
 	</div>
-  
+  	<div id="prefloader" class="hidden">
+  		<div id="loadbox" class="showbox hidden">
+  			<div>Copy/Paste preferences in.</div>
+  			<textarea class="jsonbox" id="prefdatahere"></textarea>
+  			<div class="boxbtns">
+  				<button id="submitpref">Load</button>
+  				<button class="closebtn">Close</button>
+  			</div>
+  		</div>
+  		<div id="exportbox" class="showbox hidden">
+  			<div>Copy/Paste the following into a text file.</div>
+  			<textarea class="jsonbox" id="getprefdata"></textarea>
+  			<div class="boxbtns">
+  				<button class="closebtn">Close</button>
+  			</div>
+  		</div>
+  	</div>
 </body>
 <script src="jquery-1.11.3.min.js"></script>
 <script src="closure_library/closure/goog/base.js"></script>

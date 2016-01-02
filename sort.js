@@ -114,7 +114,7 @@ function search(){
 				results[attrname] = currentobj[attrname]; 
 			}
 			break;
-		} 
+		}
 		for(var i = 0; i < cols.length; i++){
 			if(weights[next][i] < 0 || 
 				unavail.indexOf(cols[i]) > -1) continue;
@@ -148,9 +148,7 @@ function generateResults(){
 	}
 
 }
-
 function exportprefs(){
 	populate();
-	var str = JSON.stringify(exportw);
-	console.log(str);
+	return JSON.stringify(exportw);	
 }
