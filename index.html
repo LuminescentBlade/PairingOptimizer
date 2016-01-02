@@ -6,6 +6,7 @@
 
   <title>FE Pairings Optimizer</title>
 
+  <link rel="stylesheet" href="normalize.css">
   <link rel="stylesheet" href="style.css">
 
   <!--[if lt IE 9]>
@@ -37,9 +38,10 @@
 		<br>
 		<button>Toggle Drag/Drop Sorter</button>
 		<div id="prefsorter">
-			<select id="char1select">
-
+			<select id="char1select" onchange="changechar1prefs()">
 			</select>
+			<ul id="char2order">
+			</ul>
 		</div>
 		<div id="results">
 			<table>
@@ -66,6 +68,7 @@
   	</div>
 </body>
 <script src="jquery-1.11.3.min.js"></script>
+<script src="jquery-ui.min.js"></script>
 <script src="closure_library/closure/goog/base.js"></script>
 <script src="ik.js"></script>
 <script src="prefs.js"></script>

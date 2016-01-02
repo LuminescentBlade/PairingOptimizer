@@ -10,8 +10,47 @@ var table = $("#pairchart");
 var thead = table.find("thead tr");
 var tbody = table.find("tbody");
 var setsel = $("#setselect")
+var char1sel = $("#char1select")
+var char2ord = $("#char2order")
+char2ord.sortable(
+	{
+		update: function(event, ui) {
+			var br = false;
+			var rowind = rows.indexOf(char1sel.val());
+			var i = 0;
+			$('#char2order li').each(function(){
+				if($(this).hasClass("sortbreak")){
+					br = true;
+				}
+				else if(!br){
+					var c = $(this).html()
+					var colind = cols.indexOf(c);
+					cells[rowind][colind].children().eq(0).val(i*10+"");
+					i++;
+				}
+				else{
+					var c = $(this).html();
+					var colind = cols.indexOf(c);
+					cells[rowind][colind].find('input[type="text"]').val(90+"");
+				}
+
+			})	
+
+            }
+	});
 function changeset(){
 	setdata(setsel.val());
+}
+
+function changechar1prefs(){
+	if(char1sel.val() != "no_char"){
+		char2ord.html('<li class="sortbreak">===Sorted above, unsorted below===</li>');
+		setchar1sels(char1sel.val());
+	}
+	else{
+		char2ord.html('');
+	}
+	
 }
 
 function makeinputs(char1, char2, defaultval,check){
@@ -34,6 +73,13 @@ function makeinputs(char1, char2, defaultval,check){
 function otpval(pref, char1, char2){
 	if(pref[char1].otp === char2) return 1;
 	else return(pref[char1].notp.indexOf(char2) > -1)?2:0
+}
+
+function setchar1sels(char1){
+	var char2s = data[char1];
+	for(var i = 0; i < char2s.length; i++){
+		char2ord.append('<li class="char2s" value="'+char2s[i]+'">'+char2s[i]+'</li>');
+	}
 }
 
 function setdata(set){
@@ -67,20 +113,20 @@ function load(c, d, p){
 
 	cols = c;
 	data = d;
-	
+	if(cols.indexOf("unpaired") <= -1) cols.push("unpaired");	
 	rows = Object.keys(data);
-	if(cols.indexOf("unpaired") <= -1) cols.push("unpaired");
 
 	cells = [];
 	thead.html('<th class="tabcell"></th>');
 	tbody.html('');
-	
+	char1sel.html('<option id="char1def" value="no_char" selected>Select a Character</option>');
 
 	table.css("width",(cols.length+1)*twid);
 	thead.parent().css("width",(cols.length+1)*twid-2);
 	tbody.css("width",(cols.length+1)*twid);
 
 	for(var i = 0; i < rows.length; i++){
+		char1sel.append('<option value="'+rows[i]+'">'+rows[i]+'</option>')
 		var row = $('<tr id="'+rows[i]+'"></tr>');
 		var rowh = $('<td class="rowhead tabcell"></td>');
 		if (i === rows.length-1) rowh.addClass("last")
@@ -112,6 +158,7 @@ function load(c, d, p){
 
 		tbody.append($(row));
 		setscroll();
+		changechar1prefs();
 	}
 }
 
@@ -128,13 +175,13 @@ function setscroll(){
 		if(dir === "down") hitbottom = false;
 
 		$(".rowhead").each(function(i){
-			if(dir === "up")$(this).css("top",-(st-(80*i))+((st <= 5 || !hitbottom)?30:28))
-				else $(this).css("top",-(st-(80*i))+((totsc <= st+5)?28:30))
+			if(dir === "up")$(this).css("top",-(st-(80*i))+((st <= 5 || !hitbottom)?28:30))
+				else $(this).css("top",-(st-(80*i))+((totsc <= st+5)?30:28)) //all 28 for safari, 29? for ff
 			
 		})
 		if(dir==="down")hitbottom = (totsc <= st+2);
 		lastop = st;
-		thead.parent().css("left",-($(this).scrollLeft()))
+		thead.parent().css("left",-($(this).scrollLeft())) //+1 for ff
 	})
 }
 
