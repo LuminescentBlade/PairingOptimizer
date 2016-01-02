@@ -1,8 +1,9 @@
 
 /*
 */
-var cols = nohrcols;
-var data = nohrdata;
+var cols = null;
+var data = null;
+var rows = null;
 
 var preferences = null;
 

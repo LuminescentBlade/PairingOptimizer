@@ -1,10 +1,7 @@
 goog.require('goog.structs');
 goog.require('goog.structs.PriorityQueue');
 
-cols.push("unpaired");
-var rows = Object.keys(data);
 //rows.push("unpaired");
-console.log(rows);
 var twid = 65;
 var cells = [];
 
@@ -12,10 +9,10 @@ var tablewrapper = $("#detailtable");
 var table = $("#pairchart");
 var thead = table.find("thead tr");
 var tbody = table.find("tbody");
-
-table.css("width",(cols.length+1)*twid);
-thead.parent().css("width",(cols.length+1)*twid-2);
-tbody.css("width",(cols.length+1)*twid);
+var setsel = $("#setselect")
+function changeset(){
+	setdata(setsel.val());
+}
 
 function makeinputs(char1, char2, defaultval,check){
 	var input = '<input type="text" class="fieldbox" min="0" max="100"'
@@ -39,38 +36,83 @@ function otpval(pref, char1, char2){
 	else return(pref[char1].notp.indexOf(char2) > -1)?2:0
 }
 
-for(var i = 0; i < rows.length; i++){
-	var row = $('<tr id="'+rows[i]+'"></tr>');
-	var rowh = $('<td class="rowhead tabcell"></td>');
-	if (i === rows.length-1) rowh.addClass("last")
-	rowh.html(rows[i]);
-	row.append($(rowh));
-	cells.push([]);
-	for(var j = 0; j < cols.length; j++){
-		if(i === 0){
-			var colh = $('<th class="tabcell"></th>')
-			colh.html(cols[j]);
-			thead.append(colh);
-		}
-		var cell = $('<td class="tabcell"></td>');
-		if(j === 0) cell.addClass("col1")
-		cell.data("char1",row[i]);
-		cell.data("char2",cols[j]);
-		if(data[rows[i]].indexOf(cols[j]) > -1 || cols[j]==="unpaired"){
-			var value = (cols[j]==="unpaired")?100:90;
-			value = (preferences)?""+preferences[rows[i]].weights[j]:value;
-			var check = (preferences)?otpval(preferences,rows[i],cols[j]):0;
-			cell.html(makeinputs(rows[i],cols[j],value,check));
-		}
-		else{
-			cell.html("N/A");	
-		}
-		cells[i].push(cell);
-		row.append(cell);
+function setdata(set){
+	switch(set){
+		case "hoshido":
+		load(hoshicols, hoshidata, null);
+		break;
+		case "nohr":
+		load(nohrcols, nohrdata, null);
+		break;
+		case "ik":
+		load(ikcols, ikdata, null);
+		break;
+		case "hoshido gen2":
+		break;
+		case "nohr gen2":
+		break;
+		case "ik gen2":
+		break;
+		case "awakening":
+		break;
+		case "awakening gen2":
+		break;
+		default:
+		break;
 	}
+}
 
-	tbody.append($(row));
-	setscroll();
+function load(c, d, p){
+	preferences = p;
+
+	cols = c;
+	data = d;
+	
+	rows = Object.keys(data);
+	cols.push("unpaired");
+
+	cells = [];
+	thead.html('<th class="tabcell"></th>');
+	tbody.html('');
+	
+
+	table.css("width",(cols.length+1)*twid);
+	thead.parent().css("width",(cols.length+1)*twid-2);
+	tbody.css("width",(cols.length+1)*twid);
+
+	for(var i = 0; i < rows.length; i++){
+		var row = $('<tr id="'+rows[i]+'"></tr>');
+		var rowh = $('<td class="rowhead tabcell"></td>');
+		if (i === rows.length-1) rowh.addClass("last")
+		rowh.html(rows[i]);
+		row.append($(rowh));
+		cells.push([]);
+		for(var j = 0; j < cols.length; j++){
+			if(i === 0){
+				var colh = $('<th class="tabcell"></th>')
+				colh.html(cols[j]);
+				thead.append(colh);
+			}
+			var cell = $('<td class="tabcell"></td>');
+			if(j === 0) cell.addClass("col1")
+			cell.data("char1",row[i]);
+			cell.data("char2",cols[j]);
+			if(data[rows[i]].indexOf(cols[j]) > -1 || cols[j]==="unpaired"){
+				var value = (cols[j]==="unpaired")?100:90;
+				value = (preferences)?""+preferences[rows[i]].weights[j]:value;
+				var check = (preferences)?otpval(preferences,rows[i],cols[j]):0;
+				cell.html(makeinputs(rows[i],cols[j],value,check));
+			}
+			else{
+				cell.html("N/A");	
+			}
+			cells[i].push(cell);
+			row.append(cell);
+		}
+
+		tbody.append($(row));
+		setscroll();
+	}
 }
 
 function setscroll(){
@@ -135,3 +177,4 @@ function gensetup(len){
 	console.log(genthis);
 }
 
+load(hoshicols,hoshidata,preferences);

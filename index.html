@@ -27,10 +27,20 @@
 			</tbody>
 		</table>
 	</div><div id="sidebar">
+		<select id="setselect" onchange="changeset()">
+			<option value="hoshido" selected>Hoshido</option>
+			<option value="nohr">Nohr</option>
+			<option value="ik">Invisible Kingdom</option>
+		</select><br>
 		Kamui pair: <input type="text" placeholder="leave blank to not consider Kamui in pairings" name="kamuipair" id="kamuipair">
 		<button id="loadprefs">Load Prefs</button><button id="saveprefs">Save Prefs</button>
-		<button>Sort</button>
-		<div id="prefsorter"></div>
+		<br>
+		<button>Toggle Drag/Drop Sorter</button>
+		<div id="prefsorter">
+			<select id="char1select">
+
+			</select>
+		</div>
 		<div id="results">
 			<table>
 			</table>
