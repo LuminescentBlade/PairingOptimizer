@@ -2,7 +2,7 @@ var exclusion = [];
 var weights = [];
 var exportw = {};
 var results = {};
-
+charprefweight = 10;
 var kamuifield = $("#kamuipair")
 
 function populate(){
@@ -53,6 +53,7 @@ function populate(){
 			}
 		}
 	}
+	savechar1char2prefs();
 	//console.log(exportw);
 	for(var i = 0; i < exclusion.length; i++){
 		rowind = rows.indexOf(exclusion[i]);
@@ -84,7 +85,7 @@ function search(){
 				if(weights[rowind][i] < 0) continue;
 				var obj = {};
 				obj[rows[rowind]] = cols[i];
-				pq.enqueue(weights[rowind][i],obj);
+				pq.enqueue(weights[rowind][i]+charprefweight*Math.abs(char1_prefs[rowind]-char2_prefs[i]),obj);
 			}
 			run = true;
 			break;
@@ -121,7 +122,7 @@ function search(){
 			//console.log(cols[i]);
 			var newobj=JSON.parse(JSON.stringify(currentobj))
 			newobj[rows[next]] = cols[i];
-			pq.enqueue(currentval+weights[next][i],newobj);
+			pq.enqueue(currentval+weights[next][i]+charprefweight*Math.abs(char1_prefs[next]-char2_prefs[i]),newobj);
 		}
 		counter++;
 		//if(counter === 3)break;	
@@ -132,7 +133,7 @@ function search(){
 
 function generateResults(){
 	search();
-	var resblock = $("#results table");
+	resultss.removeClass("hidden");
 	resblock.empty();
 
 	var keys = Object.keys(results);
@@ -146,6 +147,8 @@ function generateResults(){
 		tr.append($(char2))
 		resblock.append($(tr));
 	}
+	menu.val(0);
+	switchweightoptions();
 
 }
 function exportprefs(){

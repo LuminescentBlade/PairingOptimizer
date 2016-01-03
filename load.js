@@ -5,16 +5,31 @@ goog.require('goog.structs.PriorityQueue');
 var twid = 65;
 var cells = [];
 
+//cache html elements to speed up selection
+
 var tablewrapper = $("#detailtable");
 var table = $("#pairchart");
 var thead = table.find("thead tr");
 var tbody = table.find("tbody");
 var setsel = $("#setselect")
-var char1sel = $("#char1select")
-var char2ord = $("#char2order")
+var menu = $("#menuoptions");
+
+var weightsort = $("#weightsorter");
+var char1sel = $("#char1select");
+var char2ord = $("#char2order");
+
+var prefsort = $("#prefsorter");
+var char1prefs = $("#char1prefs");
+var char2prefs = $("#char2prefs");
+
+var resultss = $("#results");
+var resblock = $("#results table");
+
+var rowhasotp = [];
+var colhasotp = [];
 char2ord.sortable(
 	{
-		update: function(event, ui) {
+		update: function() {
 			var br = false;
 			var rowind = rows.indexOf(char1sel.val());
 			var i = 0;
@@ -38,6 +53,73 @@ char2ord.sortable(
 
             }
 	});
+char1prefs.sortable({
+	update: function(){
+		getcharprefval(1);
+	}
+});
+char2prefs.sortable({
+	update: function(){
+		getcharprefval(2);
+	}
+});
+
+function switchweightoptions(){
+	var mv = +menu.val();
+	//console.log(mv);
+	switch(mv){
+		case 1:
+			console.log(1);
+			weightsort.addClass("hidden");
+			prefsort.removeClass("hidden");
+			resultss.addClass("hidden");
+		break;
+		case 2:
+			console.log(2);
+			weightsort.removeClass("hidden");
+			prefsort.addClass("hidden");
+			resultss.addClass("hidden");
+		break;
+		default:
+			weightsort.addClass("hidden");
+			prefsort.addClass("hidden");
+		break;
+	}
+}
+
+function getcharprefval(char){
+	var charid = (char === 1)?"#char1prefs":"#char2prefs"
+	var charweights = (char === 1)?char1_prefs:char2_prefs;
+
+	var enter = false;
+	var exit = false;
+	var constval = -1;
+	var j = 1;
+	$(charid+' li').each(function(i){
+		var _val = +$(this).attr("value");
+				if(_val < 0){
+					if(!enter){
+						enter = true;
+						constval = i;
+					}
+					else exit = true;
+				}
+				else{
+					if(!enter && !exit){
+						charweights[_val] = i;
+					}
+					else if(enter && !exit){
+						charweights[_val] = constval;
+					}
+					else{
+						charweights[_val] = constval+j;
+						j++;
+					}
+				}
+		})
+}
+
+
 function changeset(){
 	setdata(setsel.val());
 }
@@ -53,14 +135,17 @@ function changechar1prefs(){
 	
 }
 
-function makeinputs(char1, char2, defaultval,check){
+function makeinputs(i, j, defaultval,check){
+	var char1 = rows[i];
+	var char2 = cols[j];
+	var disable = (rowhasotp[i] != 0 || colhasotp[j] != 0)?"disabled":"";
 	var input = '<input type="text" class="fieldbox" min="0" max="100"'
 	if(defaultval) input += ' value ="'+defaultval+'"'
 	input += '>';
 	var radios = '<input type="radio" name="'+char1+'_'+char2+'" value="normal"';
 	if(check === 0) radios += ' checked '
 	radios+='> Reg<br>'+
-	'<input type="radio" name="'+char1+'_'+char2+'" value="otp"';
+	'<input type="radio" name="'+char1+'_'+char2+'" value="otp" ' + disable;
 	if(check === 1) radios += ' checked '
 	radios+='> OTP<br>'+
 	'<input type="radio" name="'+char1+'_'+char2+'" value="notp"';
@@ -109,6 +194,9 @@ function setdata(set){
 }
 
 function load(c, d, p){
+	rowhasotp = [];
+	colhasotp = [];
+
 	preferences = p;
 
 	cols = c;
@@ -125,19 +213,36 @@ function load(c, d, p){
 	thead.parent().css("width",(cols.length+1)*twid-2);
 	tbody.css("width",(cols.length+1)*twid);
 
+	char1prefs.html("");
+	char2prefs.html("");
+
+	loadchar1char2prefs();
+	var char1div1 = $('<li value="-1">==Positive-Neutral Divider==</li>')
+	var char2div1 = $('<li value="-1">==Positive-Neutral Divider==</li>')
+	char1prefs.append($(char1div1));
+	char2prefs.append($(char2div1));
+
 	for(var i = 0; i < rows.length; i++){
+		rowhasotp.push(0);
 		char1sel.append('<option value="'+rows[i]+'">'+rows[i]+'</option>')
 		var row = $('<tr id="'+rows[i]+'"></tr>');
 		var rowh = $('<td class="rowhead tabcell"></td>');
+		var char1li = $('<li value="'+i+'">'+rows[i]+'</li>')
+		char1prefs.append($(char1li));
 		if (i === rows.length-1) rowh.addClass("last")
 		rowh.html(rows[i]);
 		row.append($(rowh));
 		cells.push([]);
 		for(var j = 0; j < cols.length; j++){
 			if(i === 0){
+				colhasotp.push(0);
 				var colh = $('<th class="tabcell"></th>')
 				colh.html(cols[j]);
 				thead.append(colh);
+				if(cols[j] != "unpaired"){
+					var char2li = $('<li value="'+j+'">'+cols[j]+'</li>')
+					char2prefs.append($(char2li));
+				}
 			}
 			var cell = $('<td class="tabcell"></td>');
 			if(j === 0) cell.addClass("col1")
@@ -147,19 +252,33 @@ function load(c, d, p){
 				var value = (cols[j]==="unpaired")?100:90;
 				value = (preferences)?""+preferences[rows[i]].weights[j]:value;
 				var check = (preferences)?otpval(preferences,rows[i],cols[j]):0;
-				cell.html(makeinputs(rows[i],cols[j],value,check));
+				cell.html(makeinputs(i,j,value,check));
+				if(check === 1){
+					colhasotp[j] ++;
+					rowhasotp[i] ++;
+					cell.addClass("otp");
+				}else{
+					if (rowhasotp[i] != 0 || colhasotp[j] != 0){
+						cell.addClass("otpblock");
+					}
+					if (check === 2) cell.addClass("notp");
+				}
 			}
 			else{
 				cell.html("N/A");	
+				cell.addClass("disabledbox")
 			}
 			cells[i].push(cell);
 			row.append(cell);
 		}
-
 		tbody.append($(row));
-		setscroll();
-		changechar1prefs();
 	}
+	setscroll();
+	changechar1prefs();
+	var char1div2 = $('<li value="-2">==Neutral-Negative Divider==</li>')
+	var char2div2 = $('<li value="-2">==Neutral-Negative Divider==</li>')
+	char1prefs.append($(char1div2));
+	char2prefs.append($(char2div2));
 }
 
 function setscroll(){
@@ -185,11 +304,53 @@ function setscroll(){
 	})
 }
 
+function loadchar1char2prefs(){
+	char1_prefs = [];
+	char2_prefs = [];
+	var c1p = (preferences && "char1p" in preferences);
+	var c2p = (preferences && "char2p" in preferences);
+	for(var i = 0; i < rows.length; i++){
+		if(c1p) char1_prefs.push(preferences.char1p[i]);
+		else char1_prefs.push(0);
+	}
+	for(var i = 0; i < cols.length; i++){
+		if(c2p) char2_prefs.push(preferences.char2p[i]);
+		else if (cols[i] === "unpaired") char2_prefs.push(cols.length-1);
+		else char2_prefs.push(0);
+	}
+	//console.log(char1_prefs);
+	//console.log(char2_prefs);
+}
+
+function savechar1char2prefs(){
+	exportw.char1p = char1_prefs;
+	exportw.char2p = char2_prefs;
+}
 
 function loaddata(weight,shipstatus,cell){
 	cell.find("input[type='text']").val(""+weight);
 	var rad = cell.find("input[type='radio']");
-	rad.eq(shipstatus).prop("checked",true);
+	var t = rad.eq(shipstatus);
+	t.prop("checked",true);
+
+	if(shipstatus === 1){
+		blockotp(t,true);
+		cell.removeClass("notp");
+		cell.addClass("otp");
+	}
+	else{
+		if(cell.hasClass("otp")){
+			blockotp(t,false);
+			cell.removeClass("otp");
+		}
+		if(shipstatus === 2){
+			cell.addClass("notp");
+		}
+		else{
+			cell.removeClass("notp");
+		}
+	}
+
 }
 function loadprefs(){
 	for(var i = 0; i< rows.length; i++){
@@ -202,6 +363,51 @@ function loadprefs(){
 			loaddata(weight,shipstatus,cells[i][j]);
 		}
 	}
+	loadchar1char2prefs();
+	reordercharprefs(1);
+	reordercharprefs(2);
+}
+
+function reordercharprefs(char){
+	var charprefs = (char === 1)? char1prefs:char2prefs;
+	var charweights = (char === 1)? char1_prefs:char2_prefs;
+	var li1s = charprefs.children("li");
+	var weight_exist = [];
+	var repeatw = -1;
+	for(var i = 0; i < charweights.length; i++){
+		if(weight_exist.indexOf(charweights[i]) < 0)weight_exist.push(charweights[i]);
+		else{
+			repeatw = charweights[i];
+			break;
+		}
+	}
+	//console.log(repeatw);
+	li1s.each(function(){
+		var _val = +$(this).attr("value")
+		if(_val === -1){
+			$(this).data("sortval",repeatw);
+		}
+		else if (_val === -2){
+			$(this).data("sortval",repeatw+2);
+		}
+		else{
+			if(charweights[_val] < repeatw) $(this).data("sortval",charweights[_val]);
+			else if(charweights[_val] === repeatw) $(this).data("sortval",repeatw+1);
+			else $(this).data("sortval",charweights[_val]+2);
+		}
+		//console.log($(this));
+		//console.log($(this).data("sortval"));
+
+		
+	});
+	li1s.detach().sort(function(a,b){
+		var aval = $(a).data('sortval');
+		var bval = $(b).data('sortval');
+
+		if(aval===bval) return 1;
+		return aval - bval;
+	});
+	charprefs.append(li1s);
 }
 
 function gensetup(len){
@@ -223,5 +429,68 @@ function gensetup(len){
 	console.log(i1)
 	console.log(genthis);
 }
+function blockcell(cell, block,i,j){
+	if(block){
+		cell.addClass("otpblock");
+		cell.children().eq(4).attr("disabled",true);
+	}
+	else if(rowhasotp[i] === 0 && colhasotp[j] === 0){
+		cell.removeClass("otpblock");
+		cell.children().eq(4).attr("disabled",false);
+	}
+}
+function blockotp(t,block){
+	var tname = t.attr("name");
+	tname = tname.split("_");
+	var char1i = rows.indexOf(tname[0]);
+	var char2i = cols.indexOf(tname[1]);
+	if(block){
+		rowhasotp[char1i]++;
+		colhasotp[char2i]++;
+	}
+	else{
+		rowhasotp[char1i]--;
+		colhasotp[char2i]--;
+	}
+
+	for(var i = 0; i < cols.length; i++){
+		var cell = cells[char1i][i];
+		if (i === char2i) continue;
+		blockcell(cell,block,char1i,i);
+	}
+
+	for(var i = 0; i < rows.length; i++){
+		var cell = cells[i][char2i];
+		if (i === char1i) continue;
+		blockcell(cell,block,i,char2i);
+	}
+
+}
+
+tbody.on("click","input[type='radio']",function(e){
+	var t = $(e.target);
+	var tpar = t.parent();
+	var tval = t.val();
+
+	if(tval === "otp"){
+		tpar.addClass("otp");
+		blockotp(t,true);
+		if(tpar.hasClass("notp")) tpar.removeClass("notp");
+	}
+	else{
+		if(tpar.hasClass("otp")){
+			tpar.removeClass("otp")
+			blockotp(t,false);
+		}
+		if(tval === "notp"){
+			tpar.addClass("notp");
+		}
+		else{
+			tpar.removeClass("notp");
+		}
+		
+	}
+
+})
 
 load(hoshicols,hoshidata,preferences);
