@@ -178,15 +178,20 @@ function setdata(set){
 		case "ik":
 		load(ikcols, ikdata, null);
 		break;
-		case "hoshido gen2":
+		case "hoshidogen2":
+		load(hoshi2cols, hoshi2data, null);
 		break;
-		case "nohr gen2":
+		case "nohrgen2":
+		load(nohr2cols, nohr2data, null);
 		break;
-		case "ik gen2":
+		case "ikgen2":
+		load(ik2cols, ik2data, null);
 		break;
 		case "awakening":
+		load(awakencols, awakendata, null);
 		break;
-		case "awakening gen2":
+		case "awakeninggen2":
+		load(awaken2cols, awaken2data, null);
 		break;
 		default:
 		break;

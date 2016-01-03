@@ -55,3 +55,35 @@ var hoshidata = {
 	suzukaze: ["hinoka","sakura","kagerou","setsuna","oboro","kazahana","rinka","orochi","aqua","mozume","felicia"],
 	//notpaired: ["hinoka","sakura","kagerou","setsuna","oboro","kazahana","rinka","orochi","aqua","mozume","felicia"]
 }
+
+var awakencols = ["chrom", "frederick", "virion", "stahl", "vaike","kellam","lonqu","donnel","ricken","gaius","gregor","libra","henry"]
+var awakendata = {
+	lissa:["frederick", "virion", "stahl", "vaike","kellam","lonqu","donnel","ricken","gaius","gregor","libra","henry"],
+	sully:["chrom", "frederick", "virion", "stahl", "vaike","kellam","lonqu","donnel","ricken","gaius","gregor","libra","henry"],
+	miriel:["frederick", "virion", "stahl", "vaike","kellam","lonqu","donnel","ricken","gaius","gregor","libra","henry"],
+	sumia:["chrom", "frederick","gaius","henry"],
+	maribelle:["chrom", "frederick", "virion", "stahl", "vaike","kellam","lonqu","donnel","ricken","gaius","gregor","libra","henry"],
+	panne:["frederick", "virion", "stahl", "vaike","kellam","lonqu","donnel","ricken","gaius","gregor","libra","henry"],
+	cordelia:["frederick", "virion", "stahl", "vaike","kellam","lonqu","donnel","ricken","gaius","gregor","libra","henry"],
+	nowi:["frederick", "virion", "stahl", "vaike","kellam","lonqu","donnel","ricken","gaius","gregor","libra","henry"],
+	tharja:["frederick", "virion", "stahl", "vaike","kellam","lonqu","donnel","ricken","gaius","gregor","libra","henry"],
+	olivia:["chrom", "frederick", "virion", "stahl", "vaike","kellam","lonqu","donnel","ricken","gaius","gregor","libra","henry"],
+	cherche:["frederick", "virion", "stahl", "vaike","kellam","lonqu","donnel","ricken","gaius","gregor","libra","henry"]
+}
+
+var hoshi2cols = ["matoi","shara","mitama","kinu","sophie","midoriko","kanna"];
+var hoshi2data = {
+	shinonome:["matoi","shara","mitama","kinu","sophie","midoriko","kanna"],
+	grey:["matoi","shara","mitama","kinu","sophie","midoriko","kanna"],
+	kisaragi:["matoi","shara","mitama","kinu","sophie","midoriko","kanna"],
+	hisame:["matoi","shara","mitama","kinu","sophie","midoriko","kanna"],
+	dia:["matoi","shara","mitama","kinu","sophie","midoriko","kanna"],
+	shigure:["matoi","shara","mitama","kinu","sophie","midoriko","kanna"],
+	kanna:["matoi","shara","mitama","kinu","sophie","midoriko"]
+};
+var nohr2cols = null;
+var nohr2data = null;
+var ik2cols = null;
+var ik2data = null;
+var awaken2cols = null;
+var awaken2data = null;
