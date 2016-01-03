@@ -7,6 +7,9 @@ var rows = null;
 
 var preferences = null;
 
+var char1_prefs = [];
+var char2_prefs = [];
+
 function loadprefdata(str){
 	var p = JSON.parse(str);
 	preferences = p;

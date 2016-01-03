@@ -161,3 +161,19 @@ table.fixed td.col1{
 .hidden{
 	display:none !important;
 }
+
+.otp{
+	background-color: #ffccff !important;
+}
+
+.otpblock{
+	background-color: #ccffcc;
+}
+
+.notp{
+	background-color: #abcdef !important;
+}
+
+.disabledbox{
+	background-color:#888 !important;
+}

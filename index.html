@@ -36,11 +36,23 @@
 		Kamui pair: <input type="text" placeholder="leave blank to not consider Kamui in pairings" name="kamuipair" id="kamuipair">
 		<button id="loadprefs">Load Prefs</button><button id="saveprefs">Save Prefs</button>
 		<br>
-		<button>Toggle Drag/Drop Sorter</button>
-		<div id="prefsorter">
+		<div>
+			<select id="menuoptions" onchange="switchweightoptions();">
+				<option value="0">Change Weighting Options</option>
+				<option value="1">Character-specific Weights</option>
+				<option value="2">Pair-specific Weights</option>
+			</select>
+		</div>
+		<div id="weightsorter" class="hidden">
 			<select id="char1select" onchange="changechar1prefs()">
 			</select>
 			<ul id="char2order">
+			</ul>
+		</div>
+		<div id="prefsorter" class="hidden">
+			<ul id="char1prefs">
+			</ul>
+			<ul id="char2prefs">
 			</ul>
 		</div>
 		<div id="results">
