@@ -51,7 +51,7 @@ function populate(){
 			}
 		}
 	}
-	savechar1char2prefs();
+	//savechar1char2prefs();
 	//console.log(exportw);
 	for(var i = 0; i < exclusion.length; i++){
 		rowind = rows.indexOf(exclusion[i]);
