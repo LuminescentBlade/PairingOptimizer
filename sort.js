@@ -2,7 +2,7 @@ var exclusion = [];
 var weights = [];
 var exportw = {};
 var results = {};
-var multiplier = 15;
+var multiplier = 0;
 function populate(){
 	//clear everything
 	exclusion = [];
@@ -84,12 +84,13 @@ function search(){
 		colmean += char2_prefs[i];
 		if(char2_prefs[i] > colmax) colmax = char2_prefs[i];
 	}
-	console.log(char2_prefs);
-	console.log(char1_prefs);
-	console.log(colmax)
-	console.log(rowmax)
+	//console.log(char2_prefs);
+	//console.log(char1_prefs);
+	//console.log(colmax)
+	//console.log(rowmax)
 	var charprefoffset = Math.max(rowmax,colmax);
-	console.log(charprefoffset);
+	charprefoffset = 0;
+	//console.log(charprefoffset);
 	rowmean /= char1_prefs.length;
 	colmean /= char2_prefs.length;
 
@@ -105,7 +106,7 @@ function search(){
 				if(weights[rowind][i] < 0) continue;
 				var obj = {};
 				obj[rows[rowind]] = cols[i];
-				var calcweight = weights[rowind][i]+multiplier*(charprefoffset+Math.min(char1_prefs[rowind]-rowmean,char2_prefs[i]-colmean));
+				var calcweight = weights[rowind][i]+multiplier*(Math.abs(char1_prefs[rowind]-char2_prefs[i]));
 				pq.enqueue(calcweight,obj);
 			}
 			run = true;
@@ -129,7 +130,7 @@ function search(){
 			currentval += weights[ri][ci];
 		}
 		//console.log(unavail);
-		console.log(currentval);
+		//console.log(currentval);
 		next = rows.indexOf(beento[beento.length-1])+1;
 		while(rows[next] in results || ("kamui" in results && results.kamui === rows[next])) next++;
 		if(next === rows.length){
@@ -144,7 +145,7 @@ function search(){
 				unavail.indexOf(cols[i]) > -1) continue;
 			//console.log(rows[next]);
 			//console.log(cols[i]);
-			var calcweight = weights[next][i]+multiplier*(charprefoffset+Math.min(char1_prefs[next]-rowmean,char2_prefs[i]-colmean));
+			var calcweight = weights[next][i]+multiplier*(Math.abs(char1_prefs[next]-char2_prefs[i]));
 			//console.log(calcweight);
 			var newobj=JSON.parse(JSON.stringify(currentobj))
 			newobj[rows[next]] = cols[i];
