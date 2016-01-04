@@ -67,7 +67,7 @@ char2ord.sortable(
 				else{
 					var c = $(this).html();
 					var colind = cols.indexOf(c);
-					cells[rowind][colind].find('input[type="text"]').val(90+"");
+					cells[rowind][colind].find('input[type="text"]').val((i)*10+"");
 				}
 
 			})	
@@ -160,7 +160,7 @@ function makeinputs(i, j, defaultval,check){
 	var char1 = rows[i];
 	var char2 = cols[j];
 	var disable = (rowhasotp[i] != 0 || colhasotp[j] != 0)?"disabled":"";
-	var input = '<input type="text" class="fieldbox" min="0" max="100"'
+	var input = '<input type="text" class="fieldbox" '
 	if(defaultval) input += ' value ="'+defaultval+'"'
 	input += '>';
 	var radios = '<input type="radio" name="'+char1+'_'+char2+'" value="normal"';
@@ -213,6 +213,12 @@ function setdata(set){
 		break;
 		case "awakeninggen2":
 		load(awaken2cols, awaken2data, robin, null);
+		break;
+		case "fe4":
+		load(fe4cols, fe4data, null, null);
+		break;
+		case "fe4gen2":
+		load(fe4gen2cols, fe4gen2data, null, null);
 		break;
 		default:
 		break;
@@ -290,7 +296,7 @@ function load(c, d, a, p){
 			cell.data("char1",row[i]);
 			cell.data("char2",cols[j]);
 			if(data[rows[i]].indexOf(cols[j]) > -1 || cols[j]==="unpaired"){
-				var value = (cols[j]==="unpaired")?100:90;
+				var value = (cols[j]==="unpaired")?((cols.length)*10):((rows.length-2)*10);
 				value = (preferences)?""+preferences[rows[i]].weights[j]:value;
 				var check = (preferences)?otpval(preferences,rows[i],cols[j]):0;
 				cell.html(makeinputs(i,j,value,check));
@@ -469,9 +475,9 @@ function reordercharprefs(char){
 function gensetup(len){
 	var genthis = [];
 	for(var i = 0; i < len; i++){
-		genthis.push(90);
+		genthis.push((rows.length-2)*10);
 	}
-	genthis.push(100);
+	genthis.push((cols.length-1)*10);
 
 	var i1 = Math.floor((Math.random() * len));
 	var i2 = Math.floor((Math.random() * len));

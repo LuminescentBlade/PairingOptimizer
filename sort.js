@@ -2,8 +2,7 @@ var exclusion = [];
 var weights = [];
 var exportw = {};
 var results = {};
-charprefweight = 5;
-
+var multiplier = 15;
 function populate(){
 	//clear everything
 	exclusion = [];
@@ -71,7 +70,29 @@ function populate(){
 }
 
 function search(){
+	
 	populate();
+	var rowmean = 0;
+	var colmean = 0;
+	var rowmax = 0;
+	var colmax = 0;
+	for(var i = 0; i < char1_prefs.length; i++){
+		rowmean += char1_prefs[i];
+		if(char1_prefs[i] > rowmax) rowmax = char1_prefs[i];
+	}
+	for(var i = 0; i < char2_prefs.length-1; i++){
+		colmean += char2_prefs[i];
+		if(char2_prefs[i] > colmax) colmax = char2_prefs[i];
+	}
+	console.log(char2_prefs);
+	console.log(char1_prefs);
+	console.log(colmax)
+	console.log(rowmax)
+	var charprefoffset = Math.max(rowmax,colmax);
+	console.log(charprefoffset);
+	rowmean /= char1_prefs.length;
+	colmean /= char2_prefs.length;
+
 	var pq = new goog.structs.PriorityQueue();
 	rowind = 0;
 	run = false;
@@ -84,19 +105,22 @@ function search(){
 				if(weights[rowind][i] < 0) continue;
 				var obj = {};
 				obj[rows[rowind]] = cols[i];
-				pq.enqueue(weights[rowind][i]+charprefweight*Math.min(char1_prefs[rowind],char2_prefs[i]),obj);
+				var calcweight = weights[rowind][i]+multiplier*(charprefoffset+Math.min(char1_prefs[rowind]-rowmean,char2_prefs[i]-colmean));
+				pq.enqueue(calcweight,obj);
 			}
 			run = true;
 			break;
 		}
 	}
 	var counter = 0;
+	//console.log(weights);
 	while(run){
 		var currentobj = pq.dequeue();
 		//console.log(currentval);
 		//console.log(currentobj);
 		var unavail = [];
 		var beento = Object.keys(currentobj);
+		//console.log(beento);
 		var currentval = 0;
 		for(var i = 0; i < beento.length; i++){
 			var ri = rows.indexOf(beento[i]);
@@ -105,7 +129,7 @@ function search(){
 			currentval += weights[ri][ci];
 		}
 		//console.log(unavail);
-		//console.log(currentval);
+		console.log(currentval);
 		next = rows.indexOf(beento[beento.length-1])+1;
 		while(rows[next] in results || ("kamui" in results && results.kamui === rows[next])) next++;
 		if(next === rows.length){
@@ -118,10 +142,13 @@ function search(){
 		for(var i = 0; i < cols.length; i++){
 			if(weights[next][i] < 0 || 
 				unavail.indexOf(cols[i]) > -1) continue;
+			//console.log(rows[next]);
 			//console.log(cols[i]);
+			var calcweight = weights[next][i]+multiplier*(charprefoffset+Math.min(char1_prefs[next]-rowmean,char2_prefs[i]-colmean));
+			//console.log(calcweight);
 			var newobj=JSON.parse(JSON.stringify(currentobj))
 			newobj[rows[next]] = cols[i];
-			pq.enqueue(currentval+weights[next][i]+charprefweight*Math.min(char1_prefs[next]-char2_prefs[i]),newobj);
+			pq.enqueue(currentval+calcweight,newobj);
 		}
 		counter++;
 		//if(counter === 3)break;	

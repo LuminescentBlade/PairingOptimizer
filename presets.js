@@ -38,7 +38,7 @@ var nohrdata = {
 	flannel: ["camilla","elise","pieri","belka","luna","elfie","charlotte","nyx","aqua","mozume","felicia"],
 	joker: ["camilla","elise","pieri","belka","luna","elfie","charlotte","nyx","aqua","mozume","felicia"],
 	silas: ["camilla","elise","pieri","belka","luna","elfie","charlotte","nyx","aqua","mozume","felicia"],
-	suzukaze: ["camilla","elise","pieri","belka","luna","elfie","charlotte","nyx","aqua","mozume","felicia"],
+	suzukaze: ["camilla","elise","pieri","belka","luna","elfie","charlotte","nyx","aqua","mozume","felicia"]
 	//notpaired: ["camilla","elise","pieri","belka","luna","elfie","charlotte","nyx","aqua","mozume","felicia"]
 }
 
@@ -77,16 +77,69 @@ var awakendata = {
 var hoshi2cols = ["matoi","shara","mitama","kinu","sophie","midoriko","kanna"];
 var hoshi2data = {
 	shinonome:["matoi","shara","mitama","kinu","sophie","midoriko","kanna"],
-	grey:["matoi","shara","mitama","kinu","sophie","midoriko","kanna"],
 	kisaragi:["matoi","shara","mitama","kinu","sophie","midoriko","kanna"],
+	grey:["matoi","shara","mitama","kinu","sophie","midoriko","kanna"],
 	hisame:["matoi","shara","mitama","kinu","sophie","midoriko","kanna"],
 	dia:["matoi","shara","mitama","kinu","sophie","midoriko","kanna"],
 	shigure:["matoi","shara","mitama","kinu","sophie","midoriko","kanna"],
 	kanna:["matoi","shara","mitama","kinu","sophie","midoriko"]
 };
-var nohr2cols = null;
-var nohr2data = null;
-var ik2cols = null;
-var ik2data = null;
-var awaken2cols = null;
-var awaken2data = null;
+var nohr2cols = ["soleil","ophelia","eponine","velour","sophie","midoriko","kanna"];
+var nohr2data = {
+	siegbert: ["soleil","ophelia","eponine","velour","sophie","midoriko","kanna"],
+	foleo: ["soleil","ophelia","eponine","velour","sophie","midoriko","kanna"],
+	ignis: ["soleil","ophelia","eponine","velour","sophie","midoriko","kanna"],
+	lutz: ["soleil","ophelia","eponine","velour","sophie","midoriko","kanna"],
+	dia: ["soleil","ophelia","eponine","velour","sophie","midoriko","kanna"],
+	shigure: ["soleil","ophelia","eponine","velour","sophie","midoriko","kanna"],
+	kanna: ["soleil","ophelia","eponine","velour","sophie","midoriko"]
+
+};
+var ik2cols = ["matoi","shara","mitama","kinu","soleil","ophelia","eponine","velour","sophie","midoriko","kanna"];
+var ik2data = {
+	shinonome:["matoi","shara","mitama","kinu","sophie","midoriko","kanna","ophelia","eponine"],
+	kisaragi:["matoi","shara","mitama","kinu","sophie","midoriko","kanna","velour","soleil"],
+	grey:["matoi","shara","mitama","kinu","sophie","midoriko","kanna","soleil","eponine"],
+	hisame:["matoi","shara","mitama","kinu","sophie","midoriko","kanna","velour","ophelia"],
+	siegbert: ["soleil","ophelia","eponine","velour","sophie","midoriko","kanna","mitama","matoi"],
+	foleo: ["soleil","ophelia","eponine","velour","sophie","midoriko","kanna","kinu","shara"],
+	ignis: ["soleil","ophelia","eponine","velour","sophie","midoriko","kanna","kinu","matoi"],
+	lutz: ["soleil","ophelia","eponine","velour","sophie","midoriko","kanna","mitama","shara"],
+	dia:["matoi","shara","mitama","kinu","soleil","ophelia","eponine","velour","sophie","midoriko","kanna"],
+	shigure: ["matoi","shara","mitama","kinu","soleil","ophelia","eponine","velour","sophie","midoriko","kanna"],
+	kanna: ["matoi","shara","mitama","kinu","soleil","ophelia","eponine","velour","sophie","midoriko"]
+};
+var awaken2cols = ["owain","inigo","brady","laurent","yarne","gerome","morgan"];
+var awaken2data = {
+	lucina:["owain","inigo","brady","laurent","yarne","gerome","morgan"],
+	cythia:["owain","inigo","brady","laurent","yarne","gerome","morgan"],
+	kjelle:["owain","inigo","brady","laurent","yarne","gerome","morgan"],
+	severa:["owain","inigo","brady","laurent","yarne","gerome","morgan"],
+	noire:["owain","inigo","brady","laurent","yarne","gerome","morgan"],
+	nah:["owain","inigo","brady","laurent","yarne","gerome","morgan"],
+	morgan:["owain","inigo","brady","laurent","yarne","gerome"],
+};
+
+
+var fe4cols = ["alec","noish","ardan","lex","azel","finn","midayle","dew","jamka","holyn","levin","beowulf","claude"];
+var fe4data = {
+	aideen:["alec","noish","ardan","lex","azel","finn","midayle","dew","jamka","holyn","levin","beowulf","claude"],
+	ayra:["alec","noish","ardan","lex","azel","finn","midayle","dew","jamka","holyn","levin","beowulf","claude"],
+	lachesis:["alec","noish","ardan","lex","azel","finn","midayle","dew","jamka","holyn","levin","beowulf","claude"],
+	fury:["alec","noish","ardan","lex","azel","finn","midayle","dew","jamka","holyn","levin","beowulf","claude"],
+	sylvia:["alec","noish","ardan","lex","azel","finn","midayle","dew","jamka","holyn","levin","beowulf","claude"],
+	tiltyu:["alec","noish","ardan","lex","azel","finn","midayle","dew","jamka","holyn","levin","beowulf","claude"],
+	briggid:["alec","noish","ardan","lex","azel","finn","midayle","dew","jamka","holyn","levin","beowulf","claude"],
+};
+
+var fe4gen2cols = ["celice","oifey","shanan","leif","johan","johalva","aless","lester","skasaher","delmud","sety","corple","arthur","faval"];
+var fe4gen2data = {
+	yuria:["oifey","shanan","leif","johan","johalva","aless","lester","skasaher","delmud","sety","corple","arthur","faval"],
+	rana:["celice","oifey","shanan","leif","johan","johalva","aless","skasaher","delmud","sety","corple","arthur","faval"],
+	lakche:["celice","oifey","shanan","leif","johan","johalva","aless","lester","delmud","sety","corple","arthur","faval"],
+	nanna:["celice","oifey","shanan","leif","johan","johalva","aless","lester","skasaher","sety","corple","arthur","faval"],
+	fee:["celice","oifey","shanan","leif","johan","johalva","aless","lester","skasaher","delmud","corple","arthur","faval"],
+	leen:["celice","oifey","shanan","leif","johan","johalva","aless","lester","skasaher","delmud","sety","arthur","faval"],
+	tinny:["celice","oifey","shanan","leif","johan","johalva","aless","lester","skasaher","delmud","sety","corple","faval"],
+	patty:["celice","oifey","shanan","leif","johan","johalva","aless","lester","skasaher","delmud","sety","corple","arthur"],
+};
