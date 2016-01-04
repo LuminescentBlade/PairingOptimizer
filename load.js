@@ -13,11 +13,11 @@ var isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Const
 var isChrome = !!window.chrome && !isOpera;              // Chrome 1+
 var isIE = /*@cc_on!@*/false || !!document.documentMode;
 
-console.log("isOpera"+isOpera);
-console.log("isFF"+isFF);
-console.log("isSafari"+isSafari);
-console.log("isChrome"+isChrome);
-console.log("isIE"+isIE);
+//console.log("isOpera"+isOpera);
+//console.log("isFF"+isFF);
+//console.log("isSafari"+isSafari);
+//console.log("isChrome"+isChrome);
+//console.log("isIE"+isIE);
 
 
 //cache html elements to speed up selection
@@ -84,6 +84,7 @@ char2prefs.sortable({
 		getcharprefval(2);
 	}
 });
+
 
 function switchweightoptions(){
 	var mv = +menu.val();
