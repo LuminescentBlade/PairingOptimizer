@@ -28,6 +28,12 @@ function openprefsaver(){
 
 }
 
+function openinstr(){
+	$("#prefloader").removeClass("hidden");
+	$("#helpbox").removeClass("hidden");
+
+}
+
 function closeprefbox(box){
 	box.find(".jsonbox").val("");
 	box.addClass("hidden");
@@ -36,6 +42,7 @@ function closeprefbox(box){
 
 $("#loadprefs").click(openprefloader);
 $("#saveprefs").click(openprefsaver);
+$(".helpbutton").click(openinstr);
 
 $("#submitpref").click(function(){
 	var txt = $("#prefdatahere").val();

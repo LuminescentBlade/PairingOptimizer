@@ -1,3 +1,6 @@
+var kamui = "kamui";
+var robin = "robin";
+
 var ikcols = ["hinoka","sakura","kagerou","setsuna","oboro","kazahana","rinka","orochi","aqua","mozume","felicia","camilla","elise","pieri","belka","luna","elfie","charlotte","nyx"]
 
 var ikdata = {

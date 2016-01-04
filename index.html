@@ -28,6 +28,7 @@
 			</tbody>
 		</table>
 	</div><div id="sidebar">
+		<button class="helpbutton">Instructions</button>
 		<div class="selectwrapper">
 		<select id="setselect" onchange="changeset()">
 			<option value="hoshido" selected>Hoshido</option>
@@ -37,7 +38,7 @@
 			<option value="awakening">Awakening</option>
 		</select>
 		</div>
-		<div class="col-md-3">Kamui pair:</div><div class="col-md-9"> <input type="text" placeholder="leave blank to not consider the avatar in pairings" name="kamuipair" id="kamuipair"></div>
+		<div id="avatarname" class="col-md-3"></div><div class="col-md-9"> <input type="text" placeholder="leave blank to not consider the avatar in pairings" name="avatarpair" id="avatarpair"></div>
 		<button id="loadprefs">Load Prefs</button><button id="saveprefs">Save Prefs</button>
 		<br>
 		<div class="selectwrapper">
@@ -60,9 +61,17 @@
 			<ul id="char2prefs">
 			</ul>
 		</div>
-		<div id="results">
-			<table>
+		<div id="results" class="hidden">
+			<table class="results hidden">
+				<thead>
+					<tr>
+						<th>Character 1:</th>
+						<th>Character 2:</th>
+					</tr>
+				</thead>
+				<tbody></tbody>
 			</table>
+			<div id="loading" class="hidden">Calculating...</div>
 		</div>
 		<button id="optimize" onclick="generateResults()">Optimize</button>
 	</div>
@@ -78,6 +87,32 @@
   		<div id="exportbox" class="showbox hidden">
   			<div>Copy/Paste the following into a text file.</div>
   			<textarea class="jsonbox" id="getprefdata"></textarea>
+  			<div class="boxbtns">
+  				<button class="closebtn">Close</button>
+  			</div>
+  		</div>
+  		<div id="helpbox" class="showbox instrs hidden">
+  			<div class="instrswrap"><h1>Instructions:</h1>
+  				<p><strong>
+  					Please at least put 1-2 modified for each character! This program runs off a slightly modified Djikstra's algorithm, and unweighted graphs+Djikstra's algorithm doesn't particularly play well and the browser WILL crash. Ideally, at least 3-5 each is solid.
+  				</strong></p>
+  				<p>Set a <strong>non-negative</strong> priority level to your pairings <strong>(lower value, the better)</strong> and hit <kbd>Optimize.</kbd></p>
+  				<p>You can optionally take the longer, but more precise route of entering a priority value to each pair, or go to the dropdown <kbd>Change Weighting Options</kbd> on the sidebar and select <kbd>Pair-Specific Weights</kbd>. This will let you quickly drag-and-drop your preferred pairings for the characters in each row. The ones below the bar are unsorted and will be weighed at the default low value of 90, and the ones above the bar will be sorted in order of preference.</p>
+  				<p>NOTE: Navigating away from a character's pair-sorting interface will not save the ordering. This is because the system takes the weights in the main table into account, and sorting is just a quick way to populate those tables. 
+  				</p>
+  				<p>
+  				The <kbd>Character-Specific Weights</kbd> allows one to assign a priority to characters and the system will slightly prioritize the pairs for that character over another. It's not a huge difference, though.
+  				</p>
+  				<p>
+  				Use the <kbd>OTP</kbd> and <kbd>NoTP</kbd> options for each pairing to manually force or purge certain pairings, to narrow down search options. You can also enter a character for the Avatar character's spouse to eliminate them for the search, given an avatar character exists.
+  				</p>
+  				<p>
+  				Lastly, you can use <kbd>Save Prefs</kbd> and <kbd>Load Prefs</kbd> to save a text version of your preferences that you can copy/paste to a text file so you can use it another time, or to copy/paste in saved preferences.
+  				</p>
+  				<p>
+  				Any questions, concerns, whatnot, please contact me <a href="http://luminescentblade.tumblr.com/ask">here</a>.
+  				</p>
+  			</div>
   			<div class="boxbtns">
   				<button class="closebtn">Close</button>
   			</div>

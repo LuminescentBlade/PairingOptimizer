@@ -2,8 +2,7 @@ var exclusion = [];
 var weights = [];
 var exportw = {};
 var results = {};
-charprefweight = 10;
-var kamuifield = $("#kamuipair")
+charprefweight = 5;
 
 function populate(){
 	//clear everything
@@ -12,9 +11,9 @@ function populate(){
 	weights = [];
 	results = {};
 
-	if(kamuifield.val() != ""){
-		results["kamui"] = kamuifield.val();
-		exclusion.push(kamuifield.val());
+	if(avatarfield.val() != ""){
+		results[avatar] = avatarfield.val().toLowerCase();
+		exclusion.push(avatarfield.val().toLowerCase());
 	}
 	
 	for(var i = 0; i < rows.length; i++){
@@ -85,7 +84,7 @@ function search(){
 				if(weights[rowind][i] < 0) continue;
 				var obj = {};
 				obj[rows[rowind]] = cols[i];
-				pq.enqueue(weights[rowind][i]+charprefweight*Math.abs(char1_prefs[rowind]-char2_prefs[i]),obj);
+				pq.enqueue(weights[rowind][i]+charprefweight*Math.min(char1_prefs[rowind],char2_prefs[i]),obj);
 			}
 			run = true;
 			break;
@@ -122,7 +121,7 @@ function search(){
 			//console.log(cols[i]);
 			var newobj=JSON.parse(JSON.stringify(currentobj))
 			newobj[rows[next]] = cols[i];
-			pq.enqueue(currentval+weights[next][i]+charprefweight*Math.abs(char1_prefs[next]-char2_prefs[i]),newobj);
+			pq.enqueue(currentval+weights[next][i]+charprefweight*Math.min(char1_prefs[next]-char2_prefs[i]),newobj);
 		}
 		counter++;
 		//if(counter === 3)break;	
@@ -132,23 +131,34 @@ function search(){
 }
 
 function generateResults(){
-	search();
 	resultss.removeClass("hidden");
+	resultss.children("table").addClass("hidden");
 	resblock.empty();
+	loading.removeClass("hidden");
+	
+	setTimeout(function(){
+		search();
+		var keys = Object.keys(results);
+		for(var i = 0; i < keys.length; i++){
+			var tr = $('<tr></tr>')
+			var char1 = $('<td></td>')
+			var char2 = $('<td></td>')
+			char1.html(keys[i]);
+			char2.html(results[keys[i]]);
+			tr.append($(char1))
+			tr.append($(char2))
+			resblock.append($(tr));
+		}
+		resultss.children("table").removeClass("hidden");
+		resultss.children("div").addClass("hidden");
+		//console.log(results);
+		menu.val(0);
+		switchweightoptions();
+	},100);
 
-	var keys = Object.keys(results);
-	for(var i = 0; i < keys.length; i++){
-		var tr = $('<tr></tr>')
-		var char1 = $('<td></td>')
-		var char2 = $('<td></td>')
-		char1.html(keys[i]);
-		char2.html(results[keys[i]]);
-		tr.append($(char1))
-		tr.append($(char2))
-		resblock.append($(tr));
-	}
-	menu.val(0);
-	switchweightoptions();
+	
+
+	
 
 }
 function exportprefs(){

@@ -5,6 +5,21 @@ goog.require('goog.structs.PriorityQueue');
 var twid = 65;
 var cells = [];
 
+var isOpera = !!!!window.opr && opr.addons;
+    // Opera 8.0+ (UA detection to detect Blink/v8-powered Opera)
+var isFF = typeof InstallTrigger !== 'undefined';   // Firefox 1.0+
+var isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0;
+    // At least Safari 3+: "[object HTMLElementConstructor]"
+var isChrome = !!window.chrome && !isOpera;              // Chrome 1+
+var isIE = /*@cc_on!@*/false || !!document.documentMode;
+
+console.log("isOpera"+isOpera);
+console.log("isFF"+isFF);
+console.log("isSafari"+isSafari);
+console.log("isChrome"+isChrome);
+console.log("isIE"+isIE);
+
+
 //cache html elements to speed up selection
 
 var tablewrapper = $("#detailtable");
@@ -13,6 +28,8 @@ var thead = table.find("thead tr");
 var tbody = table.find("tbody");
 var setsel = $("#setselect")
 var menu = $("#menuoptions");
+var avatarname = $("#avatarname");
+var avatarfield = $("#avatarpair")
 
 var weightsort = $("#weightsorter");
 var char1sel = $("#char1select");
@@ -23,10 +40,14 @@ var char1prefs = $("#char1prefs");
 var char2prefs = $("#char2prefs");
 
 var resultss = $("#results");
-var resblock = $("#results table");
+var resblock = $("#results table tbody");
+var loading = $("#loading");
 
 var rowhasotp = [];
 var colhasotp = [];
+var avatar = null;
+
+
 char2ord.sortable(
 	{
 		update: function() {
@@ -126,7 +147,7 @@ function changeset(){
 
 function changechar1prefs(){
 	if(char1sel.val() != "no_char"){
-		char2ord.html('<li class="sortbreak">===Sorted above, unsorted below===</li>');
+		char2ord.html('<li class="sortbreak divider">Sort Divider</li>');
 		setchar1sels(char1sel.val());
 	}
 	else{
@@ -170,42 +191,57 @@ function setchar1sels(char1){
 function setdata(set){
 	switch(set){
 		case "hoshido":
-		load(hoshicols, hoshidata, null);
+		load(hoshicols, hoshidata, kamui, null);
 		break;
 		case "nohr":
-		load(nohrcols, nohrdata, null);
+		load(nohrcols, nohrdata,  kamui,null);
 		break;
 		case "ik":
-		load(ikcols, ikdata, null);
+		load(ikcols, ikdata,  kamui, null);
 		break;
 		case "hoshidogen2":
-		load(hoshi2cols, hoshi2data, null);
+		load(hoshi2cols, hoshi2data,  kamui,null);
 		break;
 		case "nohrgen2":
-		load(nohr2cols, nohr2data, null);
+		load(nohr2cols, nohr2data, kamui, null);
 		break;
 		case "ikgen2":
-		load(ik2cols, ik2data, null);
+		load(ik2cols, ik2data,  kamui,null);
 		break;
 		case "awakening":
-		load(awakencols, awakendata, null);
+		load(awakencols, awakendata, robin, null);
 		break;
 		case "awakeninggen2":
-		load(awaken2cols, awaken2data, null);
+		load(awaken2cols, awaken2data, robin, null);
 		break;
 		default:
 		break;
 	}
 }
 
-function load(c, d, p){
+function load(c, d, a, p){
+	avatar = a;
+	
+	avatarfield.val("");
+
 	rowhasotp = [];
 	colhasotp = [];
 
 	preferences = p;
 
+
+	if(!avatar){
+		avatarname.addClass("hidden");
+		avatarname.next().addClass("hidden");
+	}else{
+		avatarname.removeClass("hidden");
+		avatarname.next().removeClass("hidden");
+	}
+
 	cols = c;
 	data = d;
+
+	avatarname.html(a+" pairing");
 	if(cols.indexOf("unpaired") <= -1) cols.push("unpaired");	
 	rows = Object.keys(data);
 
@@ -222,14 +258,14 @@ function load(c, d, p){
 	char2prefs.html("");
 
 	loadchar1char2prefs();
-	var char1div1 = $('<li value="-1">==Positive-Neutral Divider==</li>')
-	var char2div1 = $('<li value="-1">==Positive-Neutral Divider==</li>')
+	var char1div1 = $('<li class="divider" value="-1">Positive-Neutral</li>')
+	var char2div1 = $('<li class="divider" value="-1">Positive-Neutral</li>')
 	char1prefs.append($(char1div1));
 	char2prefs.append($(char2div1));
 
 	for(var i = 0; i < rows.length; i++){
 		rowhasotp.push(0);
-		char1sel.append('<option value="'+rows[i]+'">'+rows[i]+'</option>')
+		char1sel.append('<option value="'+rows[i]+'">'+(rows[i].charAt(0).toUpperCase() + rows[i].slice(1)	)+'</option>')
 		var row = $('<tr id="'+rows[i]+'"></tr>');
 		var rowh = $('<td class="rowhead tabcell"></td>');
 		var char1li = $('<li value="'+i+'">'+rows[i]+'</li>')
@@ -280,8 +316,8 @@ function load(c, d, p){
 	}
 	setscroll();
 	changechar1prefs();
-	var char1div2 = $('<li value="-2">==Neutral-Negative Divider==</li>')
-	var char2div2 = $('<li value="-2">==Neutral-Negative Divider==</li>')
+	var char1div2 = $('<li class="divider" value="-2">Neutral-Negative</li>')
+	var char2div2 = $('<li class="divider" value="-2">Neutral-Negative</li>')
 	char1prefs.append($(char1div2));
 	char2prefs.append($(char2div2));
 }
@@ -299,13 +335,28 @@ function setscroll(){
 		if(dir === "down") hitbottom = false;
 
 		$(".rowhead").each(function(i){
-			if(dir === "up")$(this).css("top",-(st-(80*i))+((st <= 5 || !hitbottom)?30:28))
-				else $(this).css("top",-(st-(80*i))+((totsc <= st+5)?28:30)) //all 28 for safari, 29? for ff
+			if(isChrome || isOpera){
+				if(dir === "up")$(this).css("top",-(st-(80*i))+((st <= 5 || !hitbottom)?30:28))
+				else $(this).css("top",-(st-(80*i))+((totsc <= st+5)?28:30))
+			}
+			else if(isFF){
+				if(dir === "up")$(this).css("top",-(st-(80*i))+((st <= 5 || !hitbottom)?29:29))
+				else $(this).css("top",-(st-(80*i))+((totsc <= st+5)?29:29))
+			}else{
+				if(dir === "up")$(this).css("top",-(st-(80*i))+((st <= 5 || !hitbottom)?28:28))
+				else $(this).css("top",-(st-(80*i))+((totsc <= st+5)?28:28))
+			}
+			 //all 28 for safari, 29? for ff
 			
 		})
 		if(dir==="down")hitbottom = (totsc <= st+2);
 		lastop = st;
-		thead.parent().css("left",-($(this).scrollLeft())) //+1 for ff
+		if(isFF){
+			thead.parent().css("left",-($(this).scrollLeft()+1)) //+1 for ff
+		}else{
+			thead.parent().css("left",-($(this).scrollLeft())) //+1 for ff
+		}
+		
 	})
 }
 
@@ -498,4 +549,6 @@ tbody.on("click","input[type='radio']",function(e){
 
 })
 
-load(hoshicols,hoshidata,preferences);
+load(hoshicols,hoshidata,kamui	,preferences);
+
+tablewrapper.scroll();
